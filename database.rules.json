@@ -1,0 +1,64 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "rooms": {
+      ".indexOn": ["status", "type", "floor", "occupied"],
+      "$roomId": {
+        ".validate": "newData.hasChildren(['id', 'number', 'type', 'floor', 'capacity', 'occupied', 'status'])"
+      }
+    },
+    "students": {
+      ".indexOn": ["status", "course", "year", "roomNumber"],
+      "$studentId": {
+        ".validate": "newData.hasChildren(['id', 'name', 'email', 'phone', 'course', 'year', 'status'])"
+      }
+    },
+    "fees": {
+      ".indexOn": ["status", "studentId", "dueDate", "type"],
+      "$feeId": {
+        ".validate": "newData.hasChildren(['id', 'studentId', 'type', 'amount', 'dueDate', 'status'])"
+      }
+    },
+    "maintenance": {
+      ".indexOn": ["status", "priority", "roomNumber", "type"],
+      "$maintenanceId": {
+        ".validate": "newData.hasChildren(['id', 'roomNumber', 'type', 'description', 'priority', 'status'])"
+      }
+    },
+    "visitors": {
+      ".indexOn": ["status", "studentId", "checkInTime"],
+      "$visitorId": {
+        ".validate": "newData.hasChildren(['id', 'visitorName', 'studentId', 'roomNumber', 'purpose', 'checkInTime', 'status'])"
+      }
+    },
+    "mess": {
+      "menu": {
+        ".indexOn": ["date"],
+        "$date": {
+          ".validate": "newData.hasChildren(['date', 'breakfast', 'lunch', 'dinner'])"
+        }
+      },
+      "subscriptions": {
+        ".indexOn": ["studentId", "status", "plan"],
+        "$subscriptionId": {
+          ".validate": "newData.hasChildren(['id', 'studentId', 'plan', 'startDate', 'endDate', 'status'])"
+        }
+      },
+      "feedback": {
+        ".indexOn": ["studentId", "date", "status"],
+        "$feedbackId": {
+          ".validate": "newData.hasChildren(['id', 'studentId', 'date', 'meal', 'rating', 'status'])"
+        }
+      }
+    },
+    "settings": {
+      ".read": true,
+      ".write": "auth != null && auth.token.admin == true"
+    },
+    "test": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

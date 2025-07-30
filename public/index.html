@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 Hostel Dada - Smart Hostel Management</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Comprehensive hostel management system with SnackCart, RoomieMatcher, LaundryBalancer, MessyMess, and HostelFixer modules.">
+    <meta name="keywords" content="hostel management, student accommodation, hostel life, dorm management">
+    <meta name="author" content="Hostel Dada Team">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Hostel Dada - Smart Hostel Management">
+    <meta property="og:description" content="Transform your hostel experience with our comprehensive management platform">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hostel-dada.web.app">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Firebase configuration
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, onValue, set, push, update, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBBhY8Q2cPU5u2_DQ8hFX4HnJ7KzLqC8oE",
+            authDomain: "hostel-dada.firebaseapp.com",
+            databaseURL: "https://hostel-dada-default-rtdb.firebaseio.com/",
+            projectId: "hostel-dada",
+            storageBucket: "hostel-dada.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef123456"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        window.firebaseApp = app;
+        window.database = database;
+        window.firebaseUtils = { ref, onValue, set, push, update, remove };
+        
+        console.log("🔥 Firebase initialized successfully!");
+    </script>
+    
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Navigation Styles */
+        .nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .nav-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: white;
+            min-width: 150px;
+            justify-content: center;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .module-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e6ed;
+            transition: all 0.3s ease;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .module-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .module-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+        
+        .module-description {
+            color: #718096;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .module-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e6ed;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4299e1;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 2px;
+        }
+        
+        /* Status Indicators */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status.online {
+            background: #c6f6d5;
+            color: #2f855a;
+        }
+        
+        .status.active {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+        
+        .status.maintenance {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-item {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Firebase Connection Status */
+        .firebase-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 1000;
+        }
+        
+        .firebase-status.connected {
+            color: #2f855a;
+        }
+        
+        .firebase-status.disconnected {
+            color: #c53030;
+        }
+
+        /* Module-specific styles */
+        .module-section {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e8ed;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .form-row input, .form-row select {
+            padding: 10px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 120px;
+            flex: 1;
+        }
+
+        .form-row input:focus, .form-row select:focus {
+            outline: none;
+            border-color: #1da1f2;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1da1f2 0%, #0d8bd9 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(29, 161, 242, 0.3);
+        }
+
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .stock-name {
+            font-weight: 600;
+            color: #14171a;
+        }
+
+        .stock-details {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #657786;
+        }
+
+        .expired {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1da1f2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #657786;
+            margin-top: 5px;
+        }
+
+        .top-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .assignments-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .room-item, .student-item {
+            padding: 12px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+        }
+
+        .nav-item.active {
+            background: #1da1f2;
+            color: white;
+        }
+
+        /* 🔐 AUTHENTICATION SCREEN STYLES */
+        .auth-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        .auth-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .auth-subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        .auth-toggle {
+            display: flex;
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 30px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #718096;
+        }
+
+        .auth-tab.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-form h2 {
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        .form-subtitle {
+            color: #718096;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .auth-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .auth-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .auth-info {
+            background: #f0f4ff;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .auth-info p {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+        .auth-note {
+            font-style: italic;
+            color: #718096 !important;
+            margin-top: 10px;
+        }
+
+        .demo-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .demo-title {
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .demo-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #4a5568;
+        }
+
+        .demo-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #user-welcome {
+            color: white;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .header {
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Firebase Connection Status -->
+    <div class="firebase-status" id="firebaseStatus">
+        <div class="loading"></div>
+        Connecting to Firebase...
+    </div>
+
+    <!-- 🔐 LOGIN/SIGNUP SCREEN (First Screen) -->
+    <div id="auth-screen" class="auth-container">
+        <div class="auth-card">
+            <!-- Logo and Title -->
+            <div class="auth-header">
+                <div class="auth-logo">🏠</div>
+                <h1 class="auth-title">Hostel Dada</h1>
+                <p class="auth-subtitle">Smart Hostel Management System</p>
+            </div>
+
+            <!-- Auth Toggle Buttons -->
+            <div class="auth-toggle">
+                <button id="login-tab" class="auth-tab active" onclick="showLogin()">Login</button>
+                <button id="signup-tab" class="auth-tab" onclick="showSignup()">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <h2>Welcome Back! 👋</h2>
+                <p class="form-subtitle">Sign in to access your hostel dashboard</p>
+                
+                <div class="input-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                </div>
+                
+                <button onclick="handleLogin()" class="auth-btn primary">
+                    <span class="btn-text">Sign In</span>
+                    <span class="btn-loading" style="display: none;">Signing in...</span>
+                </button>
+                
+                <div class="auth-info">
+                    <p><strong>👤 For Students:</strong> Use your registered email and password</p>
+                    <p><strong>🛠️ For Admins:</strong> Use your assigned admin credentials</p>
+                    <p class="auth-note">New user? Click "Sign Up" above to create an account</p>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="auth-form" style="display: none;">
+                <h2>Join Hostel Dada! 🎉</h2>
+                <p class="form-subtitle">Create your account to get started</p>
+                
+                <div class="input-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="Create a password" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" placeholder="Confirm your password" required>
+                </div>
+                
+                <button onclick="handleSignup()" class="auth-btn primary">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loading" style="display: none;">Creating account...</span>
+                </button>
+                
+                <div class="auth-info">
+                    <p><strong>📝 Note:</strong> Only students can create new accounts</p>
+                    <p><strong>🛠️ Admin accounts</strong> are pre-configured by the system</p>
+                    <p class="auth-note">Already have an account? Click "Login" above</p>
+                </div>
+            </div>
+
+            <!-- Demo Login Options -->
+            <div class="demo-section">
+                <p class="demo-title">🚀 Quick Demo Access</p>
+                <div class="demo-buttons">
+                    <button onclick="demoLogin('user')" class="demo-btn">
+                        👤 Demo as Student
+                    </button>
+                    <button onclick="demoLogin('admin')" class="demo-btn">
+                        🛠️ Demo as Admin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🏠 MAIN DASHBOARD (Hidden until authenticated) -->
+    <div id="main-app" class="container" style="display: none;">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo">🏠</div>
+            <h1 class="title">Hostel Dada</h1>
+            <p class="subtitle">
+                Smart Hostel Management System - Transform your hostel experience with comprehensive modules for room management, student services, mess operations, and maintenance tracking.
+            </p>
+            <!-- Logout Button -->
+            <div class="user-info">
+                <span id="user-welcome">Welcome back!</span>
+                <button onclick="handleLogout()" class="logout-btn">🚪 Logout</button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-item active" data-module="dashboard">
+                <span>📊</span> Dashboard
+            </div>
+            <div class="nav-item" data-module="rooms">
+                <span>🏠</span> RoomieMatcher
+            </div>
+            <div class="nav-item" data-module="students">
+                <span>👥</span> Students
+            </div>
+            <div class="nav-item" data-module="mess">
+                <span>🍽️</span> MessyMess
+            </div>
+            <div class="nav-item" data-module="maintenance">
+                <span>🔧</span> HostelFixer
+            </div>
+            <div class="nav-item" data-module="snacks">
+                <span>🍿</span> SnackCart
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div id="dashboard-content">
+                <h2>📊 Hostel Dada Dashboard</h2>
+                <div class="module-grid">
+                    <!-- Room Management Module -->
+                    <div class="module-card">
+                        <span class="module-icon">🏠</span>
+                        <h3 class="module-title">RoomieMatcher</h3>
+                        <p class="module-description">
+                            Smart room allocation and roommate matching system with preference-based assignments.
+                        </p>
+                        <div class="status online">
+                            <span>🟢</span> Online
+                        </div>
+                        <div class="module-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="rooms-occupied">-</div>
+                                <div class="stat-label">Occupied</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="rooms-available">-</div>
+                                <div class="stat-label">Available</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="rooms-total">-</div>
+                                <div class="stat-label">Total</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Student Management Module -->
+                    <div class="module-card">
+                        <span class="module-icon">👥</span>
+                        <h3 class="module-title">Student Management</h3>
+                        <p class="module-description">
+                            Comprehensive student records, fee tracking, and profile management system.
+                        </p>
+                        <div class="status active">
+                            <span>🔵</span> Active
+                        </div>
+                        <div class="module-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="students-total">-</div>
+                                <div class="stat-label">Students</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="fees-pending">-</div>
+                                <div class="stat-label">Pending Fees</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="fees-paid">-</div>
+                                <div class="stat-label">Paid</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mess Management Module -->
+                    <div class="module-card">
+                        <span class="module-icon">🍽️</span>
+                        <h3 class="module-title">MessyMess</h3>
+                        <p class="module-description">
+                            Mess menu planning, meal tracking, and dietary preference management.
+                        </p>
+                        <div class="status online">
+                            <span>🟢</span> Online
+                        </div>
+                        <div class="module-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="mess-active">-</div>
+                                <div class="stat-label">Active Plans</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="mess-feedback">-</div>
+                                <div class="stat-label">Feedback</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="mess-rating">-</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maintenance Module -->
+                    <div class="module-card">
+                        <span class="module-icon">🔧</span>
+                        <h3 class="module-title">HostelFixer</h3>
+                        <p class="module-description">
+                            Maintenance request tracking, work order management, and facility monitoring.
+                        </p>
+                        <div class="status active">
+                            <span>🔵</span> Active
+                        </div>
+                        <div class="module-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="maintenance-open">-</div>
+                                <div class="stat-label">Open</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="maintenance-progress">-</div>
+                                <div class="stat-label">In Progress</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="maintenance-completed">-</div>
+                                <div class="stat-label">Completed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Snack Cart Module -->
+                    <div class="module-card">
+                        <span class="module-icon">🍿</span>
+                        <h3 class="module-title">SnackCart</h3>
+                        <p class="module-description">
+                            Campus snack and beverage ordering system with delivery tracking.
+                        </p>
+                        <div class="status online">
+                            <span>🟢</span> Online
+                        </div>
+                        <div class="module-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="snacks-orders">-</div>
+                                <div class="stat-label">Orders</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="snacks-items">-</div>
+                                <div class="stat-label">Items</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="snacks-revenue">-</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visitor Management Module -->
+                    <div class="module-card">
+                        <span class="module-icon">🚪</span>
+                        <h3 class="module-title">Visitor Management</h3>
+                        <p class="module-description">
+                            Digital visitor registration, entry tracking, and security management.
+                        </p>
+                        <div class="status active">
+                            <span>🔵</span> Active
+                        </div>
+                        <div class="module-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="visitors-today">-</div>
+                                <div class="stat-label">Today</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="visitors-week">-</div>
+                                <div class="stat-label">This Week</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="visitors-pending">-</div>
+                                <div class="stat-label">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Snack Cart Management Module -->
+            <div id="snacks" class="module-section" style="display:none;">
+                <h2>🍿 Snack Cart Management</h2>
+                
+                <!-- Current Stock -->
+                <div class="card">
+                    <h3>Current Stock</h3>
+                    <div id="stock-list"></div>
+                    <button onclick="refreshSnackStock()" class="btn-primary">🔄 Refresh Stock</button>
+                </div>
+
+                <!-- Add New Stock -->
+                <div class="card">
+                    <h3>Add New Stock</h3>
+                    <div class="form-row">
+                        <input type="text" id="snack-name" placeholder="Snack Name" required>
+                        <input type="number" id="snack-quantity" placeholder="Quantity" min="1" required>
+                        <input type="number" id="snack-price" placeholder="Price (₹)" min="1" required>
+                        <input type="date" id="snack-expiry" required>
+                        <button onclick="addNewStock()" class="btn-primary">➕ Add Stock</button>
+                    </div>
+                </div>
+
+                <!-- Purchase Snacks -->
+                <div class="card">
+                    <h3>Purchase Snacks</h3>
+                    <div class="form-row">
+                        <select id="purchase-snack">
+                            <option value="">Select Snack</option>
+                        </select>
+                        <input type="number" id="purchase-quantity" placeholder="Quantity" min="1" required>
+                        <button onclick="purchaseSnack()" class="btn-primary">🛒 Purchase</button>
+                    </div>
+                </div>
+
+                <!-- Sales Analytics -->
+                <div class="card">
+                    <h3>Sales Analytics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-revenue">₹0</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-sales">0</div>
+                            <div class="stat-label">Total Sales</div>
+                        </div>
+                    </div>
+                    <div id="top-selling-items"></div>
+                </div>
+            </div>
+
+            <!-- Room Matching Module -->
+            <div id="rooms" class="module-section" style="display:none;">
+                <h2>🏠 RoomieMatcher System</h2>
+                
+                <!-- Add Student -->
+                <div class="card">
+                    <h3>Add Student</h3>
+                    <div class="form-row">
+                        <input type="text" id="student-id" placeholder="Student ID" required>
+                        <input type="text" id="student-name" placeholder="Student Name" required>
+                        <button onclick="addStudent()" class="btn-primary">👤 Add Student</button>
+                    </div>
+                </div>
+
+                <!-- Add Room -->
+                <div class="card">
+                    <h3>Add Room</h3>
+                    <div class="form-row">
+                        <input type="text" id="room-id" placeholder="Room ID" required>
+                        <input type="number" id="room-capacity" placeholder="Capacity" min="1" max="4" required>
+                        <select id="room-type">
+                            <option value="single">Single</option>
+                            <option value="double">Double</option>
+                            <option value="triple">Triple</option>
+                            <option value="quad">Quad</option>
+                        </select>
+                        <input type="number" id="room-floor" placeholder="Floor" min="1" required>
+                        <button onclick="addRoom()" class="btn-primary">🏠 Add Room</button>
+                    </div>
+                </div>
+
+                <!-- Current Matches -->
+                <div class="card">
+                    <h3>Current Room Assignments</h3>
+                    <div id="room-assignments"></div>
+                    <button onclick="findOptimalMatches()" class="btn-primary">🎯 Find Optimal Matches</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🏠 Hostel Dada v1.0.0 | Built with ❤️ for better hostel management</p>
+            <p>Firebase Connected | Real-time Data Sync Active</p>
+        </footer>
+    </div>
+
+    <script>
+        // ========================================
+        // 🔐 AUTHENTICATION SYSTEM
+        // ========================================
+        
+        // Admin email lists (as per specifications)
+        const ADMIN_EMAILS = {
+            'snackcart.admin1@hosteldada.com': { role: 'snackcart', modules: ['snackcart'] },
+            'snackcart.admin2@hosteldada.com': { role: 'snackcart', modules: ['snackcart'] },
+            'roomie.admin1@hosteldada.com': { role: 'roomiematcher', modules: ['rooms'] },
+            'roomie.admin2@hosteldada.com': { role: 'roomiematcher', modules: ['rooms'] },
+            'laundry.admin1@hosteldada.com': { role: 'laundrybalancer', modules: ['laundry'] },
+            'laundry.admin2@hosteldada.com': { role: 'laundrybalancer', modules: ['laundry'] },
+            'mess.admin1@hosteldada.com': { role: 'messymess', modules: ['mess'] },
+            'mess.admin2@hosteldada.com': { role: 'messymess', modules: ['mess'] },
+            'fixer.admin1@hosteldada.com': { role: 'hostelfixer', modules: ['maintenance'] },
+            'fixer.admin2@hosteldada.com': { role: 'hostelfixer', modules: ['maintenance'] },
+            'global.admin1@hosteldada.com': { role: 'global', modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students'] },
+            'global.admin2@hosteldada.com': { role: 'global', modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students'] }
+        };
+
+        // Current user state
+        let currentUser = null;
+        let isAuthenticated = false;
+
+        // Show/Hide auth forms
+        function showLogin() {
+            document.getElementById('login-tab').classList.add('active');
+            document.getElementById('signup-tab').classList.remove('active');
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('signup-form').style.display = 'none';
+        }
+
+        function showSignup() {
+            document.getElementById('signup-tab').classList.add('active');
+            document.getElementById('login-tab').classList.remove('active');
+            document.getElementById('signup-form').style.display = 'block';
+            document.getElementById('login-form').style.display = 'none';
+        }
+
+        // Handle Login
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Show loading
+            setButtonLoading('login', true);
+
+            try {
+                // Simulate authentication (in real app, this would be Firebase Auth)
+                await simulateAuth(email, password);
+                
+                const user = createUserFromEmail(email);
+                await loginSuccess(user);
+                
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                setButtonLoading('login', false);
+            }
+        }
+
+        // Handle Signup
+        async function handleSignup() {
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+
+            if (!name || !email || !password || !confirm) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (password !== confirm) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            // Check if trying to register admin email
+            if (isAdminEmail(email)) {
+                alert('Admin accounts are pre-configured. Please contact system administrator.');
+                return;
+            }
+
+            // Show loading
+            setButtonLoading('signup', true);
+
+            try {
+                // Simulate registration
+                await simulateAuth(email, password);
+                
+                const user = {
+                    email: email,
+                    name: name,
+                    role: 'user',
+                    modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students']
+                };
+                
+                await loginSuccess(user);
+                
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                setButtonLoading('signup', false);
+            }
+        }
+
+        // Demo login functions
+        async function demoLogin(type) {
+            if (type === 'user') {
+                const user = {
+                    email: 'demo.student@hosteldada.com',
+                    name: 'Demo Student',
+                    role: 'user',
+                    modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students']
+                };
+                await loginSuccess(user);
+            } else if (type === 'admin') {
+                const user = {
+                    email: 'global.admin1@hosteldada.com',
+                    name: 'Global Admin',
+                    role: 'admin',
+                    adminType: 'global',
+                    modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students']
+                };
+                await loginSuccess(user);
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            currentUser = null;
+            isAuthenticated = false;
+            
+            // Show auth screen, hide main app
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+            
+            // Clear forms
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('signup-name').value = '';
+            document.getElementById('signup-email').value = '';
+            document.getElementById('signup-password').value = '';
+            document.getElementById('signup-confirm').value = '';
+            
+            console.log('👋 User logged out');
+        }
+
+        // Successful login
+        async function loginSuccess(user) {
+            currentUser = user;
+            isAuthenticated = true;
+            
+            // Hide auth screen, show main app
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            
+            // Update welcome message
+            const roleText = user.role === 'admin' ? `${user.adminType} Admin` : 'Student';
+            document.getElementById('user-welcome').textContent = `Welcome, ${user.name} (${roleText})!`;
+            
+            // Setup navigation based on user role
+            setupRoleBasedNavigation(user);
+            
+            console.log(`✅ ${user.role === 'admin' ? 'Admin' : 'User'} logged in:`, user.email);
+            
+            // Initialize the application
+            initializeApp();
+        }
+
+        // Helper functions
+        function isAdminEmail(email) {
+            return ADMIN_EMAILS.hasOwnProperty(email.toLowerCase());
+        }
+
+        function createUserFromEmail(email) {
+            const emailLower = email.toLowerCase();
+            
+            if (ADMIN_EMAILS[emailLower]) {
+                const adminInfo = ADMIN_EMAILS[emailLower];
+                return {
+                    email: email,
+                    name: extractNameFromEmail(email),
+                    role: 'admin',
+                    adminType: adminInfo.role,
+                    modules: adminInfo.modules
+                };
+            } else {
+                return {
+                    email: email,
+                    name: extractNameFromEmail(email),
+                    role: 'user',
+                    modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students']
+                };
+            }
+        }
+
+        function extractNameFromEmail(email) {
+            const localPart = email.split('@')[0];
+            return localPart.split('.').map(part => 
+                part.charAt(0).toUpperCase() + part.slice(1)
+            ).join(' ');
+        }
+
+        function setButtonLoading(formType, loading) {
+            const button = document.querySelector(`#${formType}-form .auth-btn`);
+            const btnText = button.querySelector('.btn-text');
+            const btnLoading = button.querySelector('.btn-loading');
+            
+            if (loading) {
+                button.disabled = true;
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'block';
+            } else {
+                button.disabled = false;
+                btnText.style.display = 'block';
+                btnLoading.style.display = 'none';
+            }
+        }
+
+        function setupRoleBasedNavigation(user) {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const module = item.getAttribute('data-module');
+                
+                // Show/hide modules based on user access
+                if (user.modules.includes(module)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        async function simulateAuth(email, password) {
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Simple validation (in real app, this would be handled by Firebase)
+            if (password.length < 3) {
+                throw new Error('Password too short');
+            }
+            
+            return true;
+        }
+
+        function initializeApp() {
+            // Initialize Firebase connection
+            setTimeout(() => {
+                if (window.database) {
+                    initializeFirebaseConnection();
+                } else {
+                    console.error('❌ Firebase not initialized');
+                    updateFirebaseStatus(false);
+                }
+            }, 1000);
+
+            // Setup navigation
+            setupNavigation();
+            
+            // Load initial content
+            loadModule('dashboard');
+        }
+
+        // ========================================
+        // 🏠 MAIN APPLICATION LOGIC
+        // ========================================
+        
+        // Application State
+        let currentModule = 'dashboard';
+        let firebaseConnected = false;
+
+        // Initialize application on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Hostel Dada application starting...');
+            
+            // Check if user is already logged in (in real app, check localStorage/sessionStorage)
+            const savedUser = localStorage.getItem('hostelDadaUser');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    loginSuccess(user);
+                    return;
+                } catch (e) {
+                    localStorage.removeItem('hostelDadaUser');
+                }
+            }
+            
+            // Show login screen by default
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+        });
+
+        // Firebase connection and data loading
+        function initializeFirebaseConnection() {
+            try {
+                const { ref, onValue } = window.firebaseUtils;
+                const database = window.database;
+                
+                // Test connection with a simple read
+                const testRef = ref(database, '.info/connected');
+                onValue(testRef, (snapshot) => {
+                    const connected = snapshot.val();
+                    updateFirebaseStatus(connected);
+                    if (connected) {
+                        loadDashboardData();
+                    }
+                });
+                
+                console.log('🔥 Firebase connection initialized');
+            } catch (error) {
+                console.error('❌ Firebase connection failed:', error);
+                updateFirebaseStatus(false);
+            }
+        }
+
+        // Update Firebase connection status
+        function updateFirebaseStatus(connected) {
+            const statusElement = document.getElementById('firebaseStatus');
+            if (connected) {
+                statusElement.className = 'firebase-status connected';
+                statusElement.innerHTML = '<span>🟢</span> Firebase Connected';
+                firebaseConnected = true;
+            } else {
+                statusElement.className = 'firebase-status disconnected';
+                statusElement.innerHTML = '<span>🔴</span> Firebase Disconnected';
+                firebaseConnected = false;
+            }
+        }
+
+        // Load dashboard data from Firebase
+        function loadDashboardData() {
+            if (!firebaseConnected) return;
+            
+            try {
+                const { ref, onValue } = window.firebaseUtils;
+                const database = window.database;
+
+                // Load room data
+                const roomsRef = ref(database, 'rooms');
+                onValue(roomsRef, (snapshot) => {
+                    const rooms = snapshot.val() || {};
+                    updateRoomStats(rooms);
+                });
+
+                // Load student data
+                const studentsRef = ref(database, 'students');
+                onValue(studentsRef, (snapshot) => {
+                    const students = snapshot.val() || {};
+                    updateStudentStats(students);
+                });
+
+                // Load mess data
+                const messRef = ref(database, 'mess');
+                onValue(messRef, (snapshot) => {
+                    const mess = snapshot.val() || {};
+                    updateMessStats(mess);
+                });
+
+                // Load maintenance data
+                const maintenanceRef = ref(database, 'maintenance');
+                onValue(maintenanceRef, (snapshot) => {
+                    const maintenance = snapshot.val() || {};
+                    updateMaintenanceStats(maintenance);
+                });
+
+                // Load snacks data
+                const snacksRef = ref(database, 'snacks');
+                onValue(snacksRef, (snapshot) => {
+                    const snacks = snapshot.val() || {};
+                    updateSnacksStats(snacks);
+                });
+
+                // Load visitor data
+                const visitorsRef = ref(database, 'visitors');
+                onValue(visitorsRef, (snapshot) => {
+                    const visitors = snapshot.val() || {};
+                    updateVisitorStats(visitors);
+                });
+
+            } catch (error) {
+                console.error('❌ Error loading dashboard data:', error);
+            }
+        }
+
+        // Update room statistics
+        function updateRoomStats(rooms) {
+            const roomList = Object.values(rooms);
+            const occupied = roomList.filter(room => room.status === 'occupied').length;
+            const available = roomList.filter(room => room.status === 'available').length;
+            const total = roomList.length;
+
+            document.getElementById('rooms-occupied').textContent = occupied;
+            document.getElementById('rooms-available').textContent = available;
+            document.getElementById('rooms-total').textContent = total;
+        }
+
+        // Update student statistics
+        function updateStudentStats(students) {
+            const studentList = Object.values(students);
+            const total = studentList.length;
+            const feesPending = studentList.filter(student => student.feeStatus === 'pending').length;
+            const feesPaid = studentList.filter(student => student.feeStatus === 'paid').length;
+
+            document.getElementById('students-total').textContent = total;
+            document.getElementById('fees-pending').textContent = feesPending;
+            document.getElementById('fees-paid').textContent = feesPaid;
+        }
+
+        // Update mess statistics
+        function updateMessStats(mess) {
+            const activePlans = mess.activePlans || 0;
+            const feedback = mess.feedbackCount || 0;
+            const rating = mess.averageRating || "4.5";
+
+            document.getElementById('mess-active').textContent = activePlans;
+            document.getElementById('mess-feedback').textContent = feedback;
+            document.getElementById('mess-rating').textContent = rating;
+        }
+
+        // Update maintenance statistics
+        function updateMaintenanceStats(maintenance) {
+            const requests = Object.values(maintenance.requests || {});
+            const open = requests.filter(req => req.status === 'open').length;
+            const inProgress = requests.filter(req => req.status === 'in_progress').length;
+            const completed = requests.filter(req => req.status === 'completed').length;
+
+            document.getElementById('maintenance-open').textContent = open;
+            document.getElementById('maintenance-progress').textContent = inProgress;
+            document.getElementById('maintenance-completed').textContent = completed;
+        }
+
+        // Update snacks statistics
+        function updateSnacksStats(snacks) {
+            const orders = Object.values(snacks.orders || {}).length;
+            const items = Object.values(snacks.items || {}).length;
+            const revenue = snacks.totalRevenue || "₹2,450";
+
+            document.getElementById('snacks-orders').textContent = orders;
+            document.getElementById('snacks-items').textContent = items;
+            document.getElementById('snacks-revenue').textContent = revenue;
+        }
+
+        // Update visitor statistics
+        function updateVisitorStats(visitors) {
+            const visitorList = Object.values(visitors);
+            const today = new Date().toDateString();
+            const todayVisitors = visitorList.filter(visitor => 
+                new Date(visitor.date).toDateString() === today
+            ).length;
+            
+            const thisWeekStart = new Date();
+            thisWeekStart.setDate(thisWeekStart.getDate() - 7);
+            const weekVisitors = visitorList.filter(visitor => 
+                new Date(visitor.date) >= thisWeekStart
+            ).length;
+
+            const pending = visitorList.filter(visitor => visitor.status === 'pending').length;
+
+            document.getElementById('visitors-today').textContent = todayVisitors;
+            document.getElementById('visitors-week').textContent = weekVisitors;
+            document.getElementById('visitors-pending').textContent = pending;
+        }
+
+        // ========================================
+        // 🍿 SNACKCART MODULE - DSA Implementation
+        // ========================================
+        
+        class SnackCart {
+            constructor() {
+                this.stock = new Map([
+                    ['kurkure', { name: 'Kurkure', quantity: 10, price: 15, expiry: '2025-09-01' }],
+                    ['lays', { name: 'Lays', quantity: 5, price: 20, expiry: '2025-08-10' }],
+                    ['oreo', { name: 'Oreo', quantity: 8, price: 25, expiry: '2025-10-05' }],
+                    ['maggi', { name: 'Maggi', quantity: 12, price: 12, expiry: '2025-08-15' }],
+                    ['biscuits', { name: 'Good Day', quantity: 6, price: 18, expiry: '2025-09-20' }]
+                ]);
+                this.salesHistory = [];
+                this.totalRevenue = 0;
+            }
+
+            // Priority Queue implementation for expiry-based sorting
+            getStockByExpiry() {
+                return Array.from(this.stock.values())
+                    .sort((a, b) => new Date(a.expiry) - new Date(b.expiry));
+            }
+
+            // Add new stock item
+            addStock(name, quantity, price, expiry) {
+                const key = name.toLowerCase().replace(/\s+/g, '');
+                if (this.stock.has(key)) {
+                    this.stock.get(key).quantity += quantity;
+                } else {
+                    this.stock.set(key, { name, quantity, price, expiry });
+                }
+                this.saveToFirebase();
+                return true;
+            }
+
+            // Purchase snack with inventory management
+            purchaseSnack(name, quantity) {
+                const key = name.toLowerCase().replace(/\s+/g, '');
+                const item = this.stock.get(key);
+                
+                if (!item) {
+                    return { success: false, message: 'Snack not found!' };
+                }
+                
+                if (item.quantity < quantity) {
+                    return { success: false, message: `Only ${item.quantity} ${item.name} available!` };
+                }
+
+                // Process purchase
+                item.quantity -= quantity;
+                const profit = quantity * item.price;
+                this.salesHistory.push({
+                    name: item.name,
+                    quantity,
+                    profit,
+                    timestamp: new Date().toISOString()
+                });
+                this.totalRevenue += profit;
+
+                // Remove if stock is zero
+                if (item.quantity === 0) {
+                    this.stock.delete(key);
+                }
+
+                this.saveToFirebase();
+                return { 
+                    success: true, 
+                    message: `Purchased ${quantity} ${item.name} for ₹${profit}`,
+                    profit 
+                };
+            }
+
+            // Get top selling items (using sorting algorithm)
+            getTopSellingItems(limit = 5) {
+                const itemSales = new Map();
+                
+                this.salesHistory.forEach(sale => {
+                    const current = itemSales.get(sale.name) || { name: sale.name, totalSold: 0, totalRevenue: 0 };
+                    current.totalSold += sale.quantity;
+                    current.totalRevenue += sale.profit;
+                    itemSales.set(sale.name, current);
+                });
+
+                return Array.from(itemSales.values())
+                    .sort((a, b) => b.totalRevenue - a.totalRevenue)
+                    .slice(0, limit);
+            }
+
+            // Save to Firebase
+            saveToFirebase() {
+                if (!window.database) return;
+                
+                const { ref, set } = window.firebaseUtils;
+                const snacksRef = ref(window.database, 'snacks');
+                
+                set(snacksRef, {
+                    items: Object.fromEntries(this.stock),
+                    salesHistory: this.salesHistory,
+                    totalRevenue: this.totalRevenue,
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+
+            // Load from Firebase
+            loadFromFirebase() {
+                if (!window.database) return;
+                
+                const { ref, onValue } = window.firebaseUtils;
+                const snacksRef = ref(window.database, 'snacks');
+                
+                onValue(snacksRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        if (data.items) {
+                            this.stock = new Map(Object.entries(data.items));
+                        }
+                        if (data.salesHistory) {
+                            this.salesHistory = data.salesHistory;
+                        }
+                        if (data.totalRevenue) {
+                            this.totalRevenue = data.totalRevenue;
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize SnackCart
+        window.snackCart = new SnackCart();
+        
+        // ========================================
+        // 🏠 ROOMIEMATCHER MODULE - Graph Algorithm
+        // ========================================
+        
+        class RoomieMatcher {
+            constructor() {
+                this.students = new Map();
+                this.rooms = new Map();
+                this.preferences = new Map();
+                this.matches = new Map();
+            }
+
+            // Add student with preferences
+            addStudent(id, name, preferences = []) {
+                this.students.set(id, { id, name, preferences, roomId: null });
+                this.preferences.set(id, preferences);
+                this.saveToFirebase();
+            }
+
+            // Add room
+            addRoom(id, capacity, type, floor) {
+                this.rooms.set(id, { id, capacity, type, floor, occupants: [], available: true });
+                this.saveToFirebase();
+            }
+
+            // Bipartite matching algorithm (simplified)
+            findMatches() {
+                this.matches.clear();
+                const unmatched = Array.from(this.students.keys());
+                
+                // Greedy matching based on preferences
+                for (const studentId of unmatched) {
+                    const studentPrefs = this.preferences.get(studentId) || [];
+                    
+                    for (const roomId of studentPrefs) {
+                        const room = this.rooms.get(roomId);
+                        if (room && room.available && room.occupants.length < room.capacity) {
+                            // Match found
+                            this.matches.set(studentId, roomId);
+                            room.occupants.push(studentId);
+                            if (room.occupants.length >= room.capacity) {
+                                room.available = false;
+                            }
+                            
+                            const student = this.students.get(studentId);
+                            student.roomId = roomId;
+                            break;
+                        }
+                    }
+                }
+                
+                this.saveToFirebase();
+                return this.matches;
+            }
+
+            // Get compatibility score (mock algorithm)
+            getCompatibilityScore(student1Id, student2Id) {
+                // Simple compatibility based on preferences overlap
+                const prefs1 = this.preferences.get(student1Id) || [];
+                const prefs2 = this.preferences.get(student2Id) || [];
+                
+                const common = prefs1.filter(p => prefs2.includes(p)).length;
+                const total = new Set([...prefs1, ...prefs2]).size;
+                
+                return total > 0 ? (common / total) * 100 : 0;
+            }
+
+            saveToFirebase() {
+                if (!window.database) return;
+                
+                const { ref, set } = window.firebaseUtils;
+                const roomsRef = ref(window.database, 'rooms');
+                
+                set(roomsRef, {
+                    students: Object.fromEntries(this.students),
+                    rooms: Object.fromEntries(this.rooms),
+                    matches: Object.fromEntries(this.matches),
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+        }
+
+        // Initialize RoomieMatcher
+        window.roomieMatcher = new RoomieMatcher();
+
+        // ========================================
+        // 🍽️ MESSYMESS MODULE - Queue & Scheduling
+        // ========================================
+        
+        class MessyMess {
+            constructor() {
+                this.menu = new Map([
+                    ['monday', { breakfast: 'Poha & Tea', lunch: 'Dal Rice', dinner: 'Roti Sabzi', rating: 4.2 }],
+                    ['tuesday', { breakfast: 'Upma & Coffee', lunch: 'Chole Rice', dinner: 'Paratha Dal', rating: 3.8 }],
+                    ['wednesday', { breakfast: 'Idli Sambar', lunch: 'Rajma Rice', dinner: 'Roti Paneer', rating: 4.5 }],
+                    ['thursday', { breakfast: 'Bread Omelette', lunch: 'Biryani', dinner: 'Roti Dal', rating: 4.7 }],
+                    ['friday', { breakfast: 'Aloo Paratha', lunch: 'Sambar Rice', dinner: 'Roti Sabzi', rating: 4.1 }],
+                    ['saturday', { breakfast: 'Dosa & Chutney', lunch: 'Pulao', dinner: 'Roti Curry', rating: 4.3 }],
+                    ['sunday', { breakfast: 'Puri Bhaji', lunch: 'Special Meal', dinner: 'Roti Dal', rating: 4.6 }]
+                ]);
+                this.complaints = [];
+                this.polls = [];
+                this.attendance = new Map();
+                this.mealBookings = new Map();
+            }
+
+            // Add complaint with priority queue
+            addComplaint(title, description, priority = 'medium') {
+                const complaint = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    priority,
+                    timestamp: new Date().toISOString(),
+                    status: 'pending',
+                    upvotes: 0
+                };
+                
+                this.complaints.push(complaint);
+                this.complaints.sort((a, b) => {
+                    const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+                    return priorityOrder[b.priority] - priorityOrder[a.priority];
+                });
+                
+                this.saveToFirebase();
+                return complaint;
+            }
+
+            // Create food poll
+            createPoll(question, options) {
+                const poll = {
+                    id: Date.now().toString(),
+                    question,
+                    options: options.map(opt => ({ text: opt, votes: 0 })),
+                    totalVotes: 0,
+                    timestamp: new Date().toISOString(),
+                    active: true
+                };
+                
+                this.polls.push(poll);
+                this.saveToFirebase();
+                return poll;
+            }
+
+            // Vote on poll
+            vote(pollId, optionIndex) {
+                const poll = this.polls.find(p => p.id === pollId);
+                if (poll && poll.active && optionIndex < poll.options.length) {
+                    poll.options[optionIndex].votes++;
+                    poll.totalVotes++;
+                    this.saveToFirebase();
+                    return true;
+                }
+                return false;
+            }
+
+            // Book meal
+            bookMeal(studentId, date, mealType) {
+                const key = `${studentId}-${date}-${mealType}`;
+                if (!this.mealBookings.has(key)) {
+                    this.mealBookings.set(key, {
+                        studentId,
+                        date,
+                        mealType,
+                        timestamp: new Date().toISOString()
+                    });
+                    this.saveToFirebase();
+                    return true;
+                }
+                return false;
+            }
+
+            // Get weekly menu
+            getWeeklyMenu() {
+                return Array.from(this.menu.entries()).map(([day, meals]) => ({
+                    day: day.charAt(0).toUpperCase() + day.slice(1),
+                    ...meals
+                }));
+            }
+
+            saveToFirebase() {
+                if (!window.database) return;
+                
+                const { ref, set } = window.firebaseUtils;
+                const messRef = ref(window.database, 'mess');
+                
+                set(messRef, {
+                    menu: Object.fromEntries(this.menu),
+                    complaints: this.complaints,
+                    polls: this.polls,
+                    mealBookings: Object.fromEntries(this.mealBookings),
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+        }
+
+        // Initialize MessyMess
+        window.messyMess = new MessyMess();
+
+        // ========================================
+        // 🧺 LAUNDRYBALANCER MODULE - Load Balancing
+        // ========================================
+        
+        class LaundryBalancer {
+            constructor() {
+                this.washingMachines = new Map([
+                    ['WM1', { id: 'WM1', status: 'available', currentLoad: 0, maxLoad: 8, timeRemaining: 0 }],
+                    ['WM2', { id: 'WM2', status: 'available', currentLoad: 0, maxLoad: 8, timeRemaining: 0 }],
+                    ['WM3', { id: 'WM3', status: 'running', currentLoad: 6, maxLoad: 8, timeRemaining: 25 }],
+                    ['WM4', { id: 'WM4', status: 'maintenance', currentLoad: 0, maxLoad: 8, timeRemaining: 0 }]
+                ]);
+                this.laundryQueue = [];
+                this.completedJobs = [];
+                this.bookings = [];
+            }
+
+            // Add to laundry queue
+            addToQueue(studentId, studentName, loadSize, priority = 'normal') {
+                const queueItem = {
+                    id: Date.now().toString(),
+                    studentId,
+                    studentName,
+                    loadSize,
+                    priority,
+                    timestamp: new Date().toISOString(),
+                    status: 'queued',
+                    estimatedTime: this.calculateEstimatedTime()
+                };
+                
+                this.laundryQueue.push(queueItem);
+                this.sortQueue();
+                this.saveToFirebase();
+                return queueItem;
+            }
+
+            // Load balancing algorithm
+            assignOptimalMachine() {
+                const availableMachines = Array.from(this.washingMachines.values())
+                    .filter(m => m.status === 'available');
+                
+                if (availableMachines.length === 0) return null;
+                
+                // Find machine with least recent usage (round-robin)
+                return availableMachines.sort((a, b) => a.currentLoad - b.currentLoad)[0];
+            }
+
+            // Start washing cycle
+            startWashing(queueId) {
+                const queueItem = this.laundryQueue.find(q => q.id === queueId);
+                const machine = this.assignOptimalMachine();
+                
+                if (!queueItem || !machine) return false;
+                
+                // Update machine status
+                machine.status = 'running';
+                machine.currentLoad = queueItem.loadSize;
+                machine.timeRemaining = this.calculateWashTime(queueItem.loadSize);
+                
+                // Update queue item
+                queueItem.status = 'washing';
+                queueItem.machineId = machine.id;
+                queueItem.startTime = new Date().toISOString();
+                
+                this.saveToFirebase();
+                return { machine: machine.id, estimatedTime: machine.timeRemaining };
+            }
+
+            // Calculate estimated time
+            calculateEstimatedTime() {
+                const runningMachines = Array.from(this.washingMachines.values())
+                    .filter(m => m.status === 'running');
+                
+                if (runningMachines.length === 0) return 0;
+                
+                return Math.min(...runningMachines.map(m => m.timeRemaining)) + 45; // 45min wash cycle
+            }
+
+            // Calculate wash time based on load
+            calculateWashTime(loadSize) {
+                return Math.max(30, Math.min(60, 30 + (loadSize * 3))); // 30-60 minutes
+            }
+
+            // Sort queue by priority and time
+            sortQueue() {
+                const priorityOrder = { 'urgent': 3, 'normal': 2, 'low': 1 };
+                this.laundryQueue.sort((a, b) => {
+                    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+                        return priorityOrder[b.priority] - priorityOrder[a.priority];
+                    }
+                    return new Date(a.timestamp) - new Date(b.timestamp);
+                });
+            }
+
+            saveToFirebase() {
+                if (!window.database) return;
+                
+                const { ref, set } = window.firebaseUtils;
+                const laundryRef = ref(window.database, 'laundry');
+                
+                set(laundryRef, {
+                    machines: Object.fromEntries(this.washingMachines),
+                    queue: this.laundryQueue,
+                    completedJobs: this.completedJobs,
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+        }
+
+        // Initialize LaundryBalancer
+        window.laundryBalancer = new LaundryBalancer();
+
+        // Navigation and Module Management
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const module = item.getAttribute('data-module');
+                    loadModule(module);
+                    
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+        }
+
+        function loadModule(module) {
+            // Hide all module sections
+            const sections = document.querySelectorAll('.module-section, #dashboard-content');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show selected module
+            const targetSection = document.getElementById(module === 'dashboard' ? 'dashboard-content' : module);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                currentModule = module;
+
+                // Initialize module-specific functionality
+                if (module === 'snacks') {
+                    initializeSnackCart();
+                } else if (module === 'rooms') {
+                    initializeRoomMatcher();
+                }
+            }
+        }
+
+        // ========================================
+        // 🍿 SNACKCART FUNCTIONS
+        // ========================================
+
+        function initializeSnackCart() {
+            refreshSnackStock();
+            updateSnackPurchaseDropdown();
+            updateSnackAnalytics();
+            // Load from Firebase
+            window.snackCart.loadFromFirebase();
+        }
+
+        function refreshSnackStock() {
+            const stockList = document.getElementById('stock-list');
+            const stock = window.snackCart.getStockByExpiry();
+            
+            if (stock.length === 0) {
+                stockList.innerHTML = '<p>No stock available</p>';
+                return;
+            }
+
+            stockList.innerHTML = stock.map(item => `
+                <div class="stock-item">
+                    <div class="stock-name">${item.name}</div>
+                    <div class="stock-details">
+                        <span>Qty: ${item.quantity}</span>
+                        <span>₹${item.price}</span>
+                        <span>Exp: ${item.expiry}</span>
+                        ${new Date(item.expiry) <= new Date() ? '<span class="expired">⚠️ EXPIRED</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateSnackPurchaseDropdown() {
+            const dropdown = document.getElementById('purchase-snack');
+            const stock = Array.from(window.snackCart.stock.values());
+            
+            dropdown.innerHTML = '<option value="">Select Snack</option>' + 
+                stock.filter(item => item.quantity > 0)
+                     .map(item => `<option value="${item.name.toLowerCase().replace(/\\s+/g, '')}">${item.name} (${item.quantity} available)</option>`)
+                     .join('');
+        }
+
+        function addNewStock() {
+            const name = document.getElementById('snack-name').value;
+            const quantity = parseInt(document.getElementById('snack-quantity').value);
+            const price = parseInt(document.getElementById('snack-price').value);
+            const expiry = document.getElementById('snack-expiry').value;
+
+            if (!name || !quantity || !price || !expiry) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            window.snackCart.addStock(name, quantity, price, expiry);
+            
+            // Clear form
+            document.getElementById('snack-name').value = '';
+            document.getElementById('snack-quantity').value = '';
+            document.getElementById('snack-price').value = '';
+            document.getElementById('snack-expiry').value = '';
+
+            // Refresh UI
+            refreshSnackStock();
+            updateSnackPurchaseDropdown();
+            updateSnackAnalytics();
+            
+            alert(`✅ Added ${quantity} ${name} to stock!`);
+        }
+
+        function purchaseSnack() {
+            const snackKey = document.getElementById('purchase-snack').value;
+            const quantity = parseInt(document.getElementById('purchase-quantity').value);
+
+            if (!snackKey || !quantity) {
+                alert('Please select snack and quantity');
+                return;
+            }
+
+            const result = window.snackCart.purchaseSnack(snackKey, quantity);
+            alert(result.message);
+
+            if (result.success) {
+                // Clear form
+                document.getElementById('purchase-quantity').value = '';
+                
+                // Refresh UI
+                refreshSnackStock();
+                updateSnackPurchaseDropdown();
+                updateSnackAnalytics();
+            }
+        }
+
+        function updateSnackAnalytics() {
+            document.getElementById('total-revenue').textContent = `₹${window.snackCart.totalRevenue}`;
+            document.getElementById('total-sales').textContent = window.snackCart.salesHistory.length;
+
+            const topItems = window.snackCart.getTopSellingItems(3);
+            const topItemsHtml = topItems.map((item, index) => `
+                <div class="top-item">
+                    <span>${index + 1}. ${item.name}</span>
+                    <span>${item.totalSold} sold | ₹${item.totalRevenue}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('top-selling-items').innerHTML = 
+                topItems.length > 0 ? `<h4>Top Selling Items</h4>${topItemsHtml}` : '<p>No sales data yet</p>';
+        }
+
+        // ========================================
+        // 🏠 ROOMIEMATCHER FUNCTIONS
+        // ========================================
+
+        function initializeRoomMatcher() {
+            refreshRoomAssignments();
+        }
+
+        function addStudent() {
+            const id = document.getElementById('student-id').value;
+            const name = document.getElementById('student-name').value;
+
+            if (!id || !name) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            window.roomieMatcher.addStudent(id, name);
+            
+            // Clear form
+            document.getElementById('student-id').value = '';
+            document.getElementById('student-name').value = '';
+
+            refreshRoomAssignments();
+            alert(`✅ Added student ${name} (ID: ${id})`);
+        }
+
+        function addRoom() {
+            const id = document.getElementById('room-id').value;
+            const capacity = parseInt(document.getElementById('room-capacity').value);
+            const type = document.getElementById('room-type').value;
+            const floor = parseInt(document.getElementById('room-floor').value);
+
+            if (!id || !capacity || !type || !floor) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            window.roomieMatcher.addRoom(id, capacity, type, floor);
+            
+            // Clear form
+            document.getElementById('room-id').value = '';
+            document.getElementById('room-capacity').value = '';
+            document.getElementById('room-floor').value = '';
+
+            refreshRoomAssignments();
+            alert(`✅ Added room ${id} (${type}, capacity: ${capacity})`);
+        }
+
+        function refreshRoomAssignments() {
+            const assignmentsDiv = document.getElementById('room-assignments');
+            const rooms = Array.from(window.roomieMatcher.rooms.values());
+            const students = Array.from(window.roomieMatcher.students.values());
+
+            if (rooms.length === 0 && students.length === 0) {
+                assignmentsDiv.innerHTML = '<p>No rooms or students added yet</p>';
+                return;
+            }
+
+            let html = '<div class="assignments-grid">';
+            
+            // Show rooms
+            if (rooms.length > 0) {
+                html += '<div class="room-list"><h4>Rooms</h4>';
+                rooms.forEach(room => {
+                    const occupantNames = room.occupants.map(id => {
+                        const student = window.roomieMatcher.students.get(id);
+                        return student ? student.name : id;
+                    }).join(', ');
+                    
+                    html += `
+                        <div class="room-item">
+                            <strong>${room.id}</strong> (${room.type}, Floor ${room.floor})
+                            <br>Capacity: ${room.capacity} | Occupied: ${room.occupants.length}
+                            ${occupantNames ? `<br>Students: ${occupantNames}` : ''}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+
+            // Show unassigned students
+            const unassigned = students.filter(s => !s.roomId);
+            if (unassigned.length > 0) {
+                html += '<div class="student-list"><h4>Unassigned Students</h4>';
+                unassigned.forEach(student => {
+                    html += `<div class="student-item">${student.name} (${student.id})</div>`;
+                });
+                html += '</div>';
+            }
+
+            html += '</div>';
+            assignmentsDiv.innerHTML = html;
+        }
+
+        function findOptimalMatches() {
+            const matches = window.roomieMatcher.findMatches();
+            refreshRoomAssignments();
+            alert(`✅ Found ${matches.size} optimal room assignments!`);
+        }
+
+        // Navigation setup
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const module = item.dataset.module;
+                    loadModule(module);
+                    
+                    // Update active state
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+        }
+
+        // Load module content
+        function loadModule(moduleName) {
+            currentModule = moduleName;
+            console.log(`📄 Loading module: ${moduleName}`);
+            
+            // For now, we'll show the dashboard for all modules
+            // In a full implementation, each module would have its own content
+            const content = document.querySelector('.content');
+            
+            if (moduleName === 'dashboard') {
+                // Dashboard is already loaded
+                return;
+            }
+            
+            // For other modules, show a coming soon message
+            content.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🚧</div>
+                    <h2>${getModuleTitle(moduleName)}</h2>
+                    <p style="color: #718096; margin-top: 10px; font-size: 1.1rem;">
+                        This module is coming soon! The dashboard shows live data from Firebase.
+                    </p>
+                    <button onclick="loadModule('dashboard')" style="
+                        margin-top: 20px;
+                        padding: 12px 24px;
+                        background: linear-gradient(45deg, #667eea, #764ba2);
+                        color: white;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        font-weight: 500;
+                    ">
+                        🏠 Back to Dashboard
+                    </button>
+                </div>
+            `;
+        }
+
+        // Get module title
+        function getModuleTitle(moduleName) {
+            const titles = {
+                'rooms': '🏠 RoomieMatcher',
+                'students': '👥 Student Management',
+                'mess': '🍽️ MessyMess',
+                'maintenance': '🔧 HostelFixer',
+                'snacks': '🍿 SnackCart',
+                'visitors': '🚪 Visitor Management'
+            };
+            return titles[moduleName] || 'Module';
+        }
+
+        // Global error handler
+        window.addEventListener('error', (event) => {
+            console.error('❌ Application error:', event.error);
+        });
+
+        console.log('🏠 Hostel Dada application loaded successfully!');
+    </script>
+</body>
+</html>
