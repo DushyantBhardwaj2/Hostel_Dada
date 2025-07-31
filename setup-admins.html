@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Admin Accounts - Hostel Dada</title>
+</head>
+<body>
+    <h1>🔧 Setup Admin Accounts</h1>
+    <button onclick="setupAdmins()">Create Admin Accounts</button>
+    <div id="output"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlilGYcmSTXzFRnDbOm9HzE-xzJ8X5Xso",
+            authDomain: "hostel-dada.firebaseapp.com",
+            databaseURL: "https://hostel-dada-default-rtdb.firebaseio.com",
+            projectId: "hostel-dada",
+            storageBucket: "hostel-dada.appspot.com",
+            messagingSenderId: "747399849820",
+            appId: "1:747399849820:web:2b7ca14da5f94a6b2d2e50"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Admin accounts
+        const adminAccounts = {
+            'snackcart_admin1@hosteldada_com': {
+                email: 'snackcart.admin1@hosteldada.com',
+                password: 'SnackAdmin123',
+                role: 'snackcart',
+                modules: ['snacks', 'dashboard'],
+                name: 'SnackCart Admin 1',
+                createdAt: new Date().toISOString()
+            },
+            'global_admin1@hosteldada_com': {
+                email: 'global.admin1@hosteldada.com',
+                password: 'GlobalAdmin123',
+                role: 'global',
+                modules: ['dashboard', 'snacks', 'rooms', 'mess', 'maintenance', 'students'],
+                name: 'Global Admin 1',
+                createdAt: new Date().toISOString()
+            },
+            'roomie_admin1@hosteldada_com': {
+                email: 'roomie.admin1@hosteldada.com',
+                password: 'RoomieAdmin123',
+                role: 'roomiematcher',
+                modules: ['rooms', 'dashboard'],
+                name: 'Roomie Admin 1',
+                createdAt: new Date().toISOString()
+            }
+        };
+
+        async function setupAdmins() {
+            const output = document.getElementById('output');
+            output.innerHTML = '<p>🔧 Setting up admin accounts...</p>';
+
+            try {
+                await database.ref('admin_credentials').set(adminAccounts);
+                
+                output.innerHTML = `
+                    <h3>✅ Admin accounts created successfully!</h3>
+                    <h4>📋 LOGIN CREDENTIALS:</h4>
+                    <div style="background: #f0f0f0; padding: 15px; margin: 10px 0;">
+                        <strong>SnackCart Admin:</strong><br>
+                        📧 snackcart.admin1@hosteldada.com<br>
+                        🔑 SnackAdmin123<br><br>
+                        
+                        <strong>Global Admin:</strong><br>
+                        📧 global.admin1@hosteldada.com<br>
+                        🔑 GlobalAdmin123<br><br>
+                        
+                        <strong>Roomie Admin:</strong><br>
+                        📧 roomie.admin1@hosteldada.com<br>
+                        🔑 RoomieAdmin123<br>
+                    </div>
+                    <p><strong>🚀 Ready to test!</strong> Go to <a href="https://hostel-dada.web.app" target="_blank">https://hostel-dada.web.app</a></p>
+                `;
+                
+            } catch (error) {
+                output.innerHTML = `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

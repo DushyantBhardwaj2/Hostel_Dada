@@ -31,13 +31,13 @@
         import { getDatabase, ref, onValue, set, push, update, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
         
         const firebaseConfig = {
-            apiKey: "AIzaSyBBhY8Q2cPU5u2_DQ8hFX4HnJ7KzLqC8oE",
+            apiKey: "AIzaSyBlilGYcmSTXzFRnDbOm9HzE-xzJ8X5Xso",
             authDomain: "hostel-dada.firebaseapp.com",
-            databaseURL: "https://hostel-dada-default-rtdb.firebaseio.com/",
+            databaseURL: "https://hostel-dada-default-rtdb.firebaseio.com",
             projectId: "hostel-dada",
             storageBucket: "hostel-dada.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef123456"
+            messagingSenderId: "747399849820",
+            appId: "1:747399849820:web:2b7ca14da5f94a6b2d2e50"
         };
 
         // Initialize Firebase
@@ -652,29 +652,6 @@
             margin-bottom: 15px;
         }
 
-        .demo-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .demo-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #4a5568;
-        }
-
-        .demo-btn:hover {
-            border-color: #667eea;
-            color: #667eea;
-            transform: translateY(-1px);
-        }
-
         .user-info {
             position: absolute;
             top: 20px;
@@ -707,6 +684,74 @@
 
         .header {
             position: relative;
+        }
+
+        /* ========================================
+         * 🔐 ADMIN ROLE STYLING
+         * ======================================== */
+        
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border-bottom: 3px solid #ffd700;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #1a1a1a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            animation: adminGlow 2s ease-in-out infinite alternate;
+        }
+
+        .user-badge {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ffd700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+            animation: adminPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes adminGlow {
+            0% { box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3); }
+            100% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6); }
+        }
+
+        @keyframes adminPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-item.disabled {
+            opacity: 0.3;
+            pointer-events: none;
         }
 
     </style>
@@ -792,22 +837,9 @@
                 </button>
                 
                 <div class="auth-info">
-                    <p><strong>📝 Note:</strong> Only students can create new accounts</p>
-                    <p><strong>🛠️ Admin accounts</strong> are pre-configured by the system</p>
-                    <p class="auth-note">Already have an account? Click "Login" above</p>
-                </div>
-            </div>
-
-            <!-- Demo Login Options -->
-            <div class="demo-section">
-                <p class="demo-title">🚀 Quick Demo Access</p>
-                <div class="demo-buttons">
-                    <button onclick="demoLogin('user')" class="demo-btn">
-                        👤 Demo as Student
-                    </button>
-                    <button onclick="demoLogin('admin')" class="demo-btn">
-                        🛠️ Demo as Admin
-                    </button>
+                    <p><strong>📝 Students:</strong> Create new accounts using the signup form</p>
+                    <p><strong>� Admins:</strong> Use your pre-configured admin credentials</p>
+                    <p class="auth-note">Need help? Contact your hostel administrator</p>
                 </div>
             </div>
         </div>
@@ -1120,18 +1152,18 @@
         
         // Admin email lists (as per specifications)
         const ADMIN_EMAILS = {
-            'snackcart.admin1@hosteldada.com': { role: 'snackcart', modules: ['snackcart'] },
-            'snackcart.admin2@hosteldada.com': { role: 'snackcart', modules: ['snackcart'] },
-            'roomie.admin1@hosteldada.com': { role: 'roomiematcher', modules: ['rooms'] },
-            'roomie.admin2@hosteldada.com': { role: 'roomiematcher', modules: ['rooms'] },
-            'laundry.admin1@hosteldada.com': { role: 'laundrybalancer', modules: ['laundry'] },
-            'laundry.admin2@hosteldada.com': { role: 'laundrybalancer', modules: ['laundry'] },
-            'mess.admin1@hosteldada.com': { role: 'messymess', modules: ['mess'] },
-            'mess.admin2@hosteldada.com': { role: 'messymess', modules: ['mess'] },
-            'fixer.admin1@hosteldada.com': { role: 'hostelfixer', modules: ['maintenance'] },
-            'fixer.admin2@hosteldada.com': { role: 'hostelfixer', modules: ['maintenance'] },
-            'global.admin1@hosteldada.com': { role: 'global', modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students'] },
-            'global.admin2@hosteldada.com': { role: 'global', modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students'] }
+            'snackcart.admin1@hosteldada.com': { role: 'snackcart', modules: ['snacks', 'dashboard'] },
+            'snackcart.admin2@hosteldada.com': { role: 'snackcart', modules: ['snacks', 'dashboard'] },
+            'roomie.admin1@hosteldada.com': { role: 'roomiematcher', modules: ['rooms', 'dashboard'] },
+            'roomie.admin2@hosteldada.com': { role: 'roomiematcher', modules: ['rooms', 'dashboard'] },
+            'laundry.admin1@hosteldada.com': { role: 'laundrybalancer', modules: ['laundry', 'dashboard'] },
+            'laundry.admin2@hosteldada.com': { role: 'laundrybalancer', modules: ['laundry', 'dashboard'] },
+            'mess.admin1@hosteldada.com': { role: 'messymess', modules: ['mess', 'dashboard'] },
+            'mess.admin2@hosteldada.com': { role: 'messymess', modules: ['mess', 'dashboard'] },
+            'fixer.admin1@hosteldada.com': { role: 'hostelfixer', modules: ['maintenance', 'dashboard'] },
+            'fixer.admin2@hosteldada.com': { role: 'hostelfixer', modules: ['maintenance', 'dashboard'] },
+            'global.admin1@hosteldada.com': { role: 'global', modules: ['dashboard', 'snacks', 'rooms', 'mess', 'maintenance', 'students'] },
+            'global.admin2@hosteldada.com': { role: 'global', modules: ['dashboard', 'snacks', 'rooms', 'mess', 'maintenance', 'students'] }
         };
 
         // Current user state
@@ -1155,11 +1187,18 @@
 
         // Handle Login
         async function handleLogin() {
-            const email = document.getElementById('login-email').value.trim();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
             const password = document.getElementById('login-password').value;
 
+            console.log(`🔐 Login attempt for: ${email}`);
+
             if (!email || !password) {
-                alert('Please fill in all fields');
+                alert('❌ Please fill in all fields');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                alert('❌ Please enter a valid email address');
                 return;
             }
 
@@ -1167,13 +1206,30 @@
             setButtonLoading('login', true);
 
             try {
-                // Simulate authentication (in real app, this would be Firebase Auth)
-                await simulateAuth(email, password);
-                
-                const user = createUserFromEmail(email);
-                await loginSuccess(user);
+                // Check if admin email
+                if (isAdminEmail(email)) {
+                    console.log(`👑 Admin login attempt: ${email}`);
+                    
+                    // Admin login - verify against predefined list
+                    const isValidAdmin = await verifyAdminCredentials(email, password);
+                    if (!isValidAdmin) {
+                        throw new Error('❌ Invalid admin credentials. Contact system administrator.');
+                    }
+                    
+                    const user = createAdminUserFromEmail(email);
+                    console.log(`✅ Admin authenticated:`, user);
+                    await loginSuccess(user);
+                } else {
+                    console.log(`👤 Student login attempt: ${email}`);
+                    
+                    // Student login - check Firebase Auth
+                    const user = await authenticateStudent(email, password);
+                    console.log(`✅ Student authenticated:`, user);
+                    await loginSuccess(user);
+                }
                 
             } catch (error) {
+                console.error('❌ Login failed:', error.message);
                 alert(error.message);
             } finally {
                 setButtonLoading('login', false);
@@ -1183,23 +1239,33 @@
         // Handle Signup
         async function handleSignup() {
             const name = document.getElementById('signup-name').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
+            const email = document.getElementById('signup-email').value.trim().toLowerCase();
             const password = document.getElementById('signup-password').value;
             const confirm = document.getElementById('signup-confirm').value;
 
             if (!name || !email || !password || !confirm) {
-                alert('Please fill in all fields');
+                alert('❌ Please fill in all fields');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                alert('❌ Please enter a valid email address');
                 return;
             }
 
             if (password !== confirm) {
-                alert('Passwords do not match');
+                alert('❌ Passwords do not match');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('❌ Password must be at least 6 characters long');
                 return;
             }
 
             // Check if trying to register admin email
             if (isAdminEmail(email)) {
-                alert('Admin accounts are pre-configured. Please contact system administrator.');
+                alert('❌ Admin accounts are pre-configured. Please contact system administrator.');
                 return;
             }
 
@@ -1207,16 +1273,8 @@
             setButtonLoading('signup', true);
 
             try {
-                // Simulate registration
-                await simulateAuth(email, password);
-                
-                const user = {
-                    email: email,
-                    name: name,
-                    role: 'user',
-                    modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students']
-                };
-                
+                // Create student account in Firebase
+                const user = await createStudentAccount(email, password, name);
                 await loginSuccess(user);
                 
             } catch (error) {
@@ -1226,32 +1284,193 @@
             }
         }
 
-        // Demo login functions
-        async function demoLogin(type) {
-            if (type === 'user') {
-                const user = {
-                    email: 'demo.student@hosteldada.com',
-                    name: 'Demo Student',
-                    role: 'user',
-                    modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students']
-                };
-                await loginSuccess(user);
-            } else if (type === 'admin') {
-                const user = {
-                    email: 'global.admin1@hosteldada.com',
-                    name: 'Global Admin',
-                    role: 'admin',
-                    adminType: 'global',
-                    modules: ['dashboard', 'snackcart', 'rooms', 'mess', 'maintenance', 'students']
-                };
-                await loginSuccess(user);
+        // Remove demo login functions - we'll replace with proper auth
+        
+        // ========================================
+        // 🔐 SECURE AUTHENTICATION FUNCTIONS
+        // ========================================
+        
+        // Email validation
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // Admin credentials verification (stored server-side in production)
+        async function verifyAdminCredentials(email, password) {
+            console.log(`🔍 Attempting admin login for: ${email}`);
+            
+            try {
+                // First check: Must be a valid admin email
+                if (!isAdminEmail(email)) {
+                    console.log(`❌ Not an admin email: ${email}`);
+                    return false;
+                }
+                
+                // Second check: Firebase database must be connected
+                if (!window.database || !window.firebaseUtils) {
+                    console.error('❌ Database not connected for admin verification');
+                    return false;
+                }
+                
+                // Third check: Check against Firebase Database for admin credentials
+                const adminPath = 'admin_credentials/' + email.replace(/[.@]/g, '_');
+                const adminRef = window.firebaseUtils.ref(window.database, adminPath);
+                console.log(`🔍 Checking admin credentials for: ${adminPath}`);
+                
+                // Use onValue to get data (new Firebase SDK)
+                return new Promise((resolve) => {
+                    window.firebaseUtils.onValue(adminRef, (snapshot) => {
+                        if (snapshot.exists()) {
+                            const adminData = snapshot.val();
+                            console.log(`✅ Admin found in database:`, adminData);
+                            
+                            // Fourth check: Password must match exactly
+                            const isValidPassword = adminData.password === password;
+                            console.log(`🔑 Password validation result: ${isValidPassword}`);
+                            
+                            resolve(isValidPassword);
+                        } else {
+                            console.log(`❌ Admin not found in database: ${email}`);
+                            resolve(false);
+                        }
+                    }, {
+                        onlyOnce: true
+                    });
+                });
+                
+            } catch (error) {
+                console.error('❌ Admin verification error:', error);
+                return false;
             }
         }
-
+        
+        // Create admin user object
+        function createAdminUserFromEmail(email) {
+            const emailLower = email.toLowerCase();
+            const adminInfo = ADMIN_EMAILS[emailLower];
+            
+            return {
+                email: email,
+                name: extractNameFromEmail(email),
+                role: 'admin',
+                adminType: adminInfo.role,
+                modules: adminInfo.modules
+            };
+        }
+        
+        // Authenticate student with Firebase Auth
+        async function authenticateStudent(email, password) {
+            console.log(`🔍 Attempting student login for: ${email}`);
+            
+            try {
+                // First check: Firebase database must be connected
+                if (!window.database || !window.firebaseUtils) {
+                    console.error('❌ Database not connected');
+                    throw new Error('❌ Authentication service unavailable. Please try again later.');
+                }
+                
+                // Second check: Student must exist in database
+                const studentPath = 'students/' + email.replace(/[.@]/g, '_');
+                const studentRef = window.firebaseUtils.ref(window.database, studentPath);
+                console.log(`🔍 Checking for student: ${studentPath}`);
+                
+                // Use onValue to get data (new Firebase SDK)
+                return new Promise((resolve, reject) => {
+                    window.firebaseUtils.onValue(studentRef, (snapshot) => {
+                        if (!snapshot.exists()) {
+                            console.log(`❌ Student not found: ${email}`);
+                            reject(new Error('❌ Account not found. Please create an account first.'));
+                            return;
+                        }
+                        
+                        const studentData = snapshot.val();
+                        console.log(`✅ Student found:`, studentData);
+                        
+                        // Third check: Password must match exactly
+                        if (!studentData.password || studentData.password !== password) {
+                            console.log(`❌ Password mismatch for: ${email}`);
+                            reject(new Error('❌ Invalid password. Please check your credentials.'));
+                            return;
+                        }
+                        
+                        console.log(`✅ Student authenticated successfully: ${email}`);
+                        
+                        resolve({
+                            email: email,
+                            name: studentData.name,
+                            role: 'user',
+                            modules: ['dashboard', 'snacks', 'rooms']
+                        });
+                    }, {
+                        onlyOnce: true
+                    });
+                });
+                
+            } catch (error) {
+                console.error('❌ Student authentication failed:', error.message);
+                // Make sure we throw the error and don't create any fallback user
+                throw error;
+            }
+        }
+        
+        // Create student account
+        async function createStudentAccount(email, password, name) {
+            try {
+                if (!window.database || !window.firebaseUtils) {
+                    throw new Error('❌ Registration service unavailable');
+                }
+                
+                // Check if student already exists
+                const studentPath = 'students/' + email.replace(/[.@]/g, '_');
+                const studentRef = window.firebaseUtils.ref(window.database, studentPath);
+                
+                // Use onValue to check if student exists (new Firebase SDK)
+                return new Promise((resolve, reject) => {
+                    window.firebaseUtils.onValue(studentRef, async (snapshot) => {
+                        if (snapshot.exists()) {
+                            reject(new Error('❌ Account already exists. Please login instead.'));
+                            return;
+                        }
+                        
+                        // Create new student account
+                        try {
+                            await window.firebaseUtils.set(studentRef, {
+                                name: name,
+                                email: email,
+                                password: password, // In production, this would be handled by Firebase Auth
+                                role: 'user',
+                                createdAt: new Date().toISOString()
+                            });
+                            
+                            console.log(`✅ Student account created: ${email}`);
+                            
+                            resolve({
+                                email: email,
+                                name: name,
+                                role: 'user',
+                                modules: ['dashboard', 'snacks', 'rooms']
+                            });
+                        } catch (setError) {
+                            reject(new Error('❌ Failed to create account: ' + setError.message));
+                        }
+                    }, {
+                        onlyOnce: true
+                    });
+                });
+                
+            } catch (error) {
+                throw new Error(error.message || '❌ Registration failed');
+            }
+        }
+        
         // Handle logout
         function handleLogout() {
             currentUser = null;
             isAuthenticated = false;
+            
+            // Clear localStorage
+            localStorage.removeItem('hostelDadaUser');
             
             // Show auth screen, hide main app
             document.getElementById('auth-screen').style.display = 'flex';
@@ -1273,18 +1492,31 @@
             currentUser = user;
             isAuthenticated = true;
             
+            // Save to localStorage for persistence
+            localStorage.setItem('hostelDadaUser', JSON.stringify(user));
+            
             // Hide auth screen, show main app
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             
-            // Update welcome message
-            const roleText = user.role === 'admin' ? `${user.adminType} Admin` : 'Student';
-            document.getElementById('user-welcome').textContent = `Welcome, ${user.name} (${roleText})!`;
+            // Update welcome message with role badge
+            const roleText = user.role === 'admin' ? `${user.adminType.toUpperCase()} ADMIN` : 'STUDENT';
+            const roleBadge = user.role === 'admin' ? `<span class="admin-badge">👑 ${roleText}</span>` : `<span class="user-badge">👤 ${roleText}</span>`;
+            document.getElementById('user-welcome').innerHTML = `Welcome, ${user.name} ${roleBadge}`;
+            
+            // Add admin styling to header if admin
+            const header = document.querySelector('.header');
+            if (user.role === 'admin') {
+                header.classList.add('admin-header');
+            } else {
+                header.classList.remove('admin-header');
+            }
             
             // Setup navigation based on user role
             setupRoleBasedNavigation(user);
             
             console.log(`✅ ${user.role === 'admin' ? 'Admin' : 'User'} logged in:`, user.email);
+            console.log(`🎯 Access modules:`, user.modules);
             
             // Initialize the application
             initializeApp();
@@ -1326,6 +1558,8 @@
 
         function setButtonLoading(formType, loading) {
             const button = document.querySelector(`#${formType}-form .auth-btn`);
+            if (!button) return;
+            
             const btnText = button.querySelector('.btn-text');
             const btnLoading = button.querySelector('.btn-loading');
             
@@ -1343,28 +1577,36 @@
         function setupRoleBasedNavigation(user) {
             const navItems = document.querySelectorAll('.nav-item');
             
+            console.log(`🔐 Setting up navigation for ${user.role}:`, user.modules);
+            
             navItems.forEach(item => {
                 const module = item.getAttribute('data-module');
+                const moduleText = item.textContent.trim();
                 
                 // Show/hide modules based on user access
                 if (user.modules.includes(module)) {
                     item.style.display = 'block';
+                    item.classList.remove('disabled');
+                    console.log(`✅ Showing module: ${module} (${moduleText})`);
+                    
+                    // Add admin indicator for admin users
+                    if (user.role === 'admin' && !item.querySelector('.admin-indicator')) {
+                        const adminIndicator = document.createElement('span');
+                        adminIndicator.className = 'admin-indicator';
+                        adminIndicator.textContent = '👑';
+                        adminIndicator.title = 'Admin Access';
+                        item.appendChild(adminIndicator);
+                    }
                 } else {
                     item.style.display = 'none';
+                    item.classList.add('disabled');
+                    console.log(`❌ Hiding module: ${module} (${moduleText})`);
                 }
             });
-        }
-
-        async function simulateAuth(email, password) {
-            // Simulate network delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
             
-            // Simple validation (in real app, this would be handled by Firebase)
-            if (password.length < 3) {
-                throw new Error('Password too short');
-            }
-            
-            return true;
+            // Show total accessible modules
+            const visibleModules = user.modules.length;
+            console.log(`📊 Total accessible modules: ${visibleModules}`);
         }
 
         function initializeApp() {
