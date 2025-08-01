@@ -1,7 +1,7 @@
 {
-  "name": "Hostel Dada",
+  "name": "Hostel Dada - DSA-Based Hostel Management",
   "short_name": "HostelDada",
-  "description": "Smart hostel management for modern students",
+  "description": "DSA-focused hostel management system with SnackCart, RoomieMatcher, LaundryBalancer, MessyMess, and HostelFixer modules",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
