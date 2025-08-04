@@ -9,6 +9,15 @@
         ".read": true
       }
     },
+    "userProfiles": {
+      ".read": true,
+      ".write": true,
+      "$userId": {
+        ".read": true,
+        ".write": true,
+        ".validate": "newData.hasChildren(['uid', 'fullName', 'isProfileComplete'])"
+      }
+    },
     "students": {
       ".read": true,
       ".write": true,
@@ -21,6 +30,44 @@
       ".indexOn": ["status", "type", "floor", "occupied"],
       "$roomId": {
         ".validate": "newData.hasChildren(['id', 'number', 'type', 'floor', 'capacity', 'occupied', 'status'])"
+      }
+    },
+    "snacks": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["category", "quantity", "sellingPrice"],
+      "$snackId": {
+        ".validate": "newData.hasChildren(['name', 'description', 'costPrice', 'sellingPrice', 'quantity', 'category', 'createdAt', 'updatedAt'])"
+      }
+    },
+    "snackOrders": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["userId", "status", "createdAt"],
+      "$orderId": {
+        ".validate": "newData.hasChildren(['userId', 'totalAmount', 'status', 'paymentMethod', 'createdAt'])"
+      }
+    },
+    "compatibilityScores": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["studentId1", "studentId2", "totalScore"],
+      "$scoreId": {
+        ".validate": "newData.hasChildren(['studentId1', 'studentId2', 'totalScore'])"
+      }
+    },
+    "roommateSurveys": {
+      ".read": true,
+      ".write": true,
+      "$surveyId": {
+        ".validate": "newData.hasChildren(['studentId', 'createdAt'])"
+      }
+    },
+    "roomAllocation": {
+      ".read": true,
+      ".write": true,
+      "$allocationId": {
+        ".validate": "newData.hasChildren(['roomId', 'studentIds', 'createdAt'])"
       }
     },
     "snackcart": {

@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { getAuth, GoogleAuthProvider } from 'firebase/auth'
+import { getDatabase } from 'firebase/database'
 import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
@@ -24,7 +24,13 @@ const app = initializeApp(firebaseConfig)
 
 // Initialize Firebase services
 export const auth = getAuth(app)
-export const db = getFirestore(app)
+export const realtimeDb = getDatabase(app)
 export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null
+
+// Configure Google Auth Provider with domain restriction
+export const googleProvider = new GoogleAuthProvider()
+googleProvider.setCustomParameters({
+  hd: 'nsut.ac.in' // Restrict to NSUT domain
+})
 
 export default app

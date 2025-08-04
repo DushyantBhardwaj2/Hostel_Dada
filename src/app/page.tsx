@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/firebase-context'
 import { LoginForm } from '@/components/auth/login-form'
 import { Dashboard } from '@/components/dashboard/dashboard'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { ProfileGuard } from '@/components/profile/profile-guard'
 
 export default function Home() {
   const { user, loading } = useAuth()
@@ -19,5 +20,9 @@ export default function Home() {
     )
   }
 
-  return user ? <Dashboard /> : <LoginForm />
+  return (
+    <ProfileGuard>
+      {user ? <Dashboard /> : <LoginForm />}
+    </ProfileGuard>
+  )
 }
