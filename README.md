@@ -2,6 +2,21 @@
 
 ## College Placement Project Portfolio
 
+## About This Project
+
+Hostel Dada is a **Kotlin Multiplatform Project (KMP)** designed to demonstrate a modern, scalable, and maintainable approach to cross-platform app development. The project targets Android, iOS, and Desktop from a single codebase, leveraging shared business logic, data handling, and UI components where possible.
+
+### What is Kotlin Multiplatform (KMP)?
+KMP allows you to write common code (business logic, data, algorithms, etc.) once and use it across multiple platforms (Android, iOS, Desktop, Web). Platform-specific code is only written where necessary (e.g., UI, platform APIs).
+
+**Key Benefits:**
+- **Code Reuse:** Share up to 80%+ of code across platforms
+- **Consistency:** Single source of truth for business logic and models
+- **Maintainability:** Fewer bugs, easier updates
+- **Modern Tooling:** Compose Multiplatform, Coroutines, Koin, SQLDelight, Ktor
+
+---
+
 A **Kotlin Multiplatform** hostel management application demonstrating **Clean Architecture**, **MVVM**, and **DSA implementations** for efficient data handling.
 
 > **Note**: This project is a migration from the Next.js web application in the parent folder to a cross-platform mobile/desktop solution using modern Kotlin technologies.
@@ -227,6 +242,38 @@ class MaintenancePriorityQueue {
 - JDK 17+
 - Xcode 15+ (for iOS)
 
+---
+
+## 🏃‍♂️ How the Project Works
+
+### 1. Code Structure
+- **Shared Modules:** All core business logic, data models, repositories, and algorithms are in `core/`, `feature/`, and `shared/` modules. These are used by all platforms.
+- **Platform Modules:**
+    - `androidApp/` — Android-specific UI and entry point
+    - `iosApp/` — iOS-specific UI and entry point
+    - `desktopApp/` — Desktop (JVM) UI and entry point (if present)
+
+### 2. Build & Run
+- **Android:**
+    1. Open the project in Android Studio
+    2. Select the `androidApp` configuration
+    3. Run on emulator or device
+- **iOS:**
+    1. Open `iosApp/iosApp.xcodeproj` in Xcode
+    2. Select a simulator or device
+    3. Build & run
+- **Desktop:**
+    1. Run `./gradlew :desktopApp:run` from terminal
+
+### 3. Workflow
+1. **Business logic** (algorithms, repositories, use cases) is written once in shared modules
+2. **UI** is implemented using Compose Multiplatform (Android/Desktop) and SwiftUI (iOS)
+3. **Dependency Injection** is handled by Koin, with platform-specific modules for each target
+4. **Data** is fetched from Firebase or local storage (SQLDelight), abstracted behind repositories
+5. **Features** (Auth, SnackCart, Roomie) are implemented as independent modules for modularity
+
+---
+
 ### Build Commands
 ```bash
 # Android
@@ -273,6 +320,12 @@ class MaintenancePriorityQueue {
 ## 👨‍💻 Author
 
 **Dushy** - College Placement Project
+
+---
+
+## 🌐 Repository
+
+GitHub: [https://github.com/DushyantBhardwaj2/Hostel_Dada](https://github.com/DushyantBhardwaj2/Hostel_Dada)
 
 ---
 
