@@ -1,7 +1,5 @@
 # Hostel Dada - Kotlin Multiplatform 🏠
 
-## College Placement Project Portfolio
-
 ## About This Project
 
 Hostel Dada is a **Kotlin Multiplatform Project (KMP)** designed to demonstrate a modern, scalable, and maintainable approach to cross-platform app development. The project targets Android, iOS, and Desktop from a single codebase, leveraging shared business logic, data handling, and UI components where possible.
